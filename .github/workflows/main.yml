@@ -1,35 +1,30 @@
 name: Renpho to Garmin Sync
-
 on:
-  workflow_dispatch:
   schedule:
-    - cron: '0 6 * * *'
-
-env:
-  # Verhindert Node-Warnungen in der 2026er Umgebung
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    - cron: '0 7 * * *' # Täglich um 07:00 Uhr UTC
+  workflow_dispatch: # Ermöglicht manuelles Starten
 
 jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Code auschecken
-        uses: actions/checkout@v5
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - name: Python installieren
-        uses: actions/setup-python@v6
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.10'
 
-      - name: Tool installieren
-        # Wir nutzen jetzt den korrekten Namen mit Bindestrichen
-        run: pip install renpho-garmin-sync
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
 
-      - name: Sync ausführen
+      - name: Run Sync
         env:
-          RENPHO_EMAIL: ${{ secrets.RENPHO_USER }}
-          RENPHO_PASSWORD: ${{ secrets.RENPHO_PASSWORD }}
-          GARMIN_EMAIL: ${{ secrets.GARMIN_USER }}
-          GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
-        # Der Befehl heißt bei diesem Paket genau wie der Installationsname
-        run: renpho-garmin-sync
+          RP_USER: ${{ secrets.RENPHO_USER }}
+          RP_PASS: ${{ secrets.RENPHO_PASSWORD }}
+          GA_USER: ${{ secrets.GARMIN_USER }}
+          GA_PASS: ${{ secrets.GARMIN_PASSWORD }}
+        run: |
+          python rgs.py --ru "$RP_USER" --rpw "$RP_PASS" --gu "$GA_USER" --gpw "$GA_PASS"
+          
