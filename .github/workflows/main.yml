@@ -17,20 +17,20 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '6.0.x'
+        dotnet-version: '6.0.x' # Je nach Projekt-Version evtl. auf '7.0.x' oder '8.0.x' anpassen, falls es immer noch meckert
 
     - name: Install dependencies
       run: dotnet restore
 
     - name: Run Sync
       env:
-        # Hier greift das Skript auf deine Secrets zu
         RENPHO_EMAIL: ${{ secrets.RENPHO_USER }}
         RENPHO_PASSWORD: ${{ secrets.RENPHO_PASSWORD }}
         GARMIN_EMAIL: ${{ secrets.GARMIN_USER }}
         GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
+      # HIER IST DIE ÄNDERUNG: "--project RenphoGarminSync.Console"
       run: |
-        dotnet run --project RenphoGarminSync-CLI -- \
+        dotnet run --project RenphoGarminSync.Console -- \
         --renpho-email "$RENPHO_EMAIL" \
         --renpho-password "$RENPHO_PASSWORD" \
         --garmin-email "$GARMIN_EMAIL" \
