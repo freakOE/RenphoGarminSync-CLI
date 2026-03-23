@@ -1,32 +1,34 @@
 name: Renpho to Garmin Sync
 
 on:
+  workflow_dispatch:
   schedule:
-    # Jeden Tag um 06:00 Uhr UTC
     - cron: '0 6 * * *'
-  workflow_dispatch: # Ermöglicht manuellen Start
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  build:
+  sync:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - name: Code auschecken
+        uses: actions/checkout@v5
 
-      - name: Python einrichten
-        uses: actions/setup-python@v5
+      - name: Python installieren
+        uses: actions/setup-python@v6
         with:
-          python-version: '3.10'
+          python-version: '3.12'
 
-      - name: Sync-Tool installieren
-        run: pip install renphogarminsync
+      - name: Tool von GitHub installieren
+        # Hier installieren wir direkt vom Quellcode, da es kein pip-Paket gibt
+        run: |
+          pip install git+https://github.com/setu-m/renpho-garmin-sync.git
 
       - name: Sync ausführen
-        # Hier werden deine Secrets als Umgebungsvariablen geladen
         env:
           RENPHO_EMAIL: ${{ secrets.RENPHO_USER }}
           RENPHO_PASSWORD: ${{ secrets.RENPHO_PASSWORD }}
           GARMIN_EMAIL: ${{ secrets.GARMIN_USER }}
           GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
-        run: renphogarminsync
+        run: renpho-sync
