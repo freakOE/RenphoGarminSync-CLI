@@ -3,7 +3,7 @@ name: Renpho to Garmin Sync
 on:
   schedule:
     # Läuft jeden Tag um 06:00 Uhr UTC (ca. 07:00/08:00 Uhr deutsche Zeit)
-    - cron: '0 6 * * *'
+    - cron: '0 10 * * *'
   workflow_dispatch: # Ermöglicht den manuellen Start per Button
 
 jobs:
