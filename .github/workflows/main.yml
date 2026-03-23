@@ -1,0 +1,24 @@
+name: Renpho to Garmin Sync
+
+on:
+  schedule:
+    # Dieser Befehl führt den Sync täglich um 06:00 Uhr UTC aus
+    - cron: '0 10 * * *'
+  workflow_dispatch: # Ermöglicht den manuellen Start per Klick
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Sync Renpho to Garmin
+        # Hier wird das Tool direkt ausgeführt
+        uses: setu-m/renpho-garmin-sync-action@v1
+        with:
+          renpho_email: ${{ secrets.RENPHO_USER }}
+          renpho_password: ${{ secrets.RENPHO_PASSWORD }}
+          garmin_email: ${{ secrets.GARMIN_USER }}
+          garmin_password: ${{ secrets.GARMIN_PASSWORD }}
