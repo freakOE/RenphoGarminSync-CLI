@@ -6,6 +6,7 @@ on:
     - cron: '0 6 * * *'
 
 env:
+  # Verhindert Node-Warnungen in der 2026er Umgebung
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
@@ -20,10 +21,9 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Tool von GitHub installieren
-        # Hier installieren wir direkt vom Quellcode, da es kein pip-Paket gibt
-        run: |
-          pip install git+https://github.com/setu-m/renpho-garmin-sync.git
+      - name: Tool installieren
+        # Wir nutzen jetzt den korrekten Namen mit Bindestrichen
+        run: pip install renpho-garmin-sync
 
       - name: Sync ausführen
         env:
@@ -31,4 +31,5 @@ jobs:
           RENPHO_PASSWORD: ${{ secrets.RENPHO_PASSWORD }}
           GARMIN_EMAIL: ${{ secrets.GARMIN_USER }}
           GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
-        run: renpho-sync
+        # Der Befehl heißt bei diesem Paket genau wie der Installationsname
+        run: renpho-garmin-sync
