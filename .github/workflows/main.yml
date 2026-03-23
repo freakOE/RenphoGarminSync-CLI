@@ -2,9 +2,9 @@ name: Renpho to Garmin Sync
 
 on:
   schedule:
-    # Läuft jeden Tag um 06:00 Uhr UTC (ca. 07:00/08:00 Uhr deutsche Zeit)
-    - cron: '0 10 * * *'
-  workflow_dispatch: # Ermöglicht den manuellen Start per Button
+    # Läuft jeden Tag um 06:00 Uhr UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -17,7 +17,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '6.0.x' # Je nach Projekt-Version evtl. auf '7.0.x' oder '8.0.x' anpassen, falls es immer noch meckert
+        dotnet-version: '6.0.x'
 
     - name: Install dependencies
       run: dotnet restore
@@ -30,8 +30,8 @@ jobs:
         GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
       shell: bash
       run: |
-        dotnet run --project RenphoGarminSync.Console -- \
-        --renpho-email "$RENPHO_USER" \
+        dotnet run --project RenphoGarminSync.Console -- sync \
+        --renpho-email "$RENPHO_EMAIL" \
         --renpho-password "$RENPHO_PASSWORD" \
-        --garmin-email "$GARMIN_USER" \
+        --garmin-email "$GARMIN_EMAIL" \
         --garmin-password "$GARMIN_PASSWORD"
