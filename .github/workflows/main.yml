@@ -24,14 +24,14 @@ jobs:
 
     - name: Run Sync
       env:
-        RENPHO_EMAIL: ${{ secrets.RENPHO_USER }}
+        RENPHO_EMAIL: ${{ secrets.RENPHO_EMAIL }}
         RENPHO_PASSWORD: ${{ secrets.RENPHO_PASSWORD }}
-        GARMIN_EMAIL: ${{ secrets.GARMIN_USER }}
+        GARMIN_EMAIL: ${{ secrets.GARMIN_EMAIL }}
         GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
-      # HIER IST DIE ÄNDERUNG: "--project RenphoGarminSync.Console"
+      shell: bash
       run: |
         dotnet run --project RenphoGarminSync.Console -- \
-        --renpho-email "$RENPHO_USER" \
+        --renpho-email "$RENPHO_EMAIL" \
         --renpho-password "$RENPHO_PASSWORD" \
-        --garmin-email "$GARMIN_USER" \
+        --garmin-email "$GARMIN_EMAIL" \
         --garmin-password "$GARMIN_PASSWORD"
