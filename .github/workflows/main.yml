@@ -31,7 +31,7 @@ jobs:
       # HIER IST DIE ÄNDERUNG: "--project RenphoGarminSync.Console"
       run: |
         dotnet run --project RenphoGarminSync.Console -- \
-        --renpho-email "$RENPHO_EMAIL" \
+        --renpho-email "$RENPHO_USER" \
         --renpho-password "$RENPHO_PASSWORD" \
-        --garmin-email "$GARMIN_EMAIL" \
+        --garmin-email "$GARMIN_USER" \
         --garmin-password "$GARMIN_PASSWORD"
