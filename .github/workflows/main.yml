@@ -2,9 +2,9 @@ name: Renpho to Garmin Sync
 
 on:
   schedule:
-    # Dieser Befehl führt den Sync täglich um 06:00 Uhr UTC aus
-    - cron: '0 10 * * *'
-  workflow_dispatch: # Ermöglicht den manuellen Start per Klick
+    # Jeden Tag um 06:00 Uhr UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch: # Ermöglicht manuellen Start
 
 jobs:
   build:
@@ -14,11 +14,19 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Sync Renpho to Garmin
-        # Hier wird das Tool direkt ausgeführt
-        uses: setu-m/renpho-garmin-sync-action@v1
+      - name: Python einrichten
+        uses: actions/setup-python@v5
         with:
-          renpho_email: ${{ secrets.RENPHO_USER }}
-          renpho_password: ${{ secrets.RENPHO_PASSWORD }}
-          garmin_email: ${{ secrets.GARMIN_USER }}
-          garmin_password: ${{ secrets.GARMIN_PASSWORD }}
+          python-version: '3.10'
+
+      - name: Sync-Tool installieren
+        run: pip install renphogarminsync
+
+      - name: Sync ausführen
+        # Hier werden deine Secrets als Umgebungsvariablen geladen
+        env:
+          RENPHO_EMAIL: ${{ secrets.RENPHO_USER }}
+          RENPHO_PASSWORD: ${{ secrets.RENPHO_PASSWORD }}
+          GARMIN_EMAIL: ${{ secrets.GARMIN_USER }}
+          GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
+        run: renphogarminsync
